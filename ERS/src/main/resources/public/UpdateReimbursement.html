@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Employee Reimbursement</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body class="employee-homepage-body" onload="loadPageForUser()">
+        <nav class="Employee-Navbar">
+            <ul>              
+                <li>               
+                    <a class="navbar-a-element" href="./EmployeeHomepage.html">
+                    Home 
+                    </a>
+                </li>            
+                <li>
+                    <a class="navbar-a-element" href="./EmpoyeeReimbursement.html">
+                    Reimbursement
+                    </a>
+                </li>
+                <li>
+                    <a class="navbar-a-element" href='./index.html' onclick='return logout()'>
+                    Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    <div class="form">
+        <div class="form-display">
+        <label for="date">Starting Date: </label>
+        <input  id="date" class="input-form" type="date" />
+        <label for="time">Duration: </label>
+        <input  id="time" class="input-form" type="time" />
+        </div>
+        <br>
+        <div class="form-display">
+        <label for="location">Location: </label>
+        <input id="location" class="input-form" type="text" />
+        </div>
+        <br>
+        <div class="form-display">
+        <label for="description">Description: </label>
+        <Textarea id="description" class="input-form" rows="3" cols="20">Enter Description Here</Textarea>
+        </div>
+        <br>
+        <div class="form-display">
+        <label for="cost">Cost: </label>
+        <input id="cost" class="input-form" type="text"/>
+        </div>
+        <br>
+        <div class="form-display">
+            <label for="gradingformat">Grading Format: </label>
+            <textarea id="gradingformat" class="input-form" rows="5" cols="20">Example: A-> 90-100</textarea>       
+        </div>
+        <br>
+        <div class="form-display">
+            <label for="event">Event: </label>
+            <select name="event" id="event">
+                <option>Select Here</option>
+            </select>
+        </div>
+        <br>
+        <div class="form-display">
+            <label for="justification">justification: </label>
+            <textarea id="justification" class="input-form" rows="4" cols="20">Enter your Justification</textarea>
+        </div>
+        <br>
+        <div class="form-display">
+            <label for="optionalfiles">Files (Optional): </label>
+            <input id="optionalfiles" class="input-form" type="file" accept="application/pdf"/>
+        </div>
+        <br>
+        <button id="submit" onclick="UpdateReimbursement()">Update</button>
+    </div>
+    <script>
+        
+            dropdown=document.getElementById("event");
+            
+            async function addoption(selectbox,text,value )
+            {
+                var options = document.createElement("OPTION");
+                options.text = text;
+                options.value = value;
+                selectbox.options.add(options);
+            }
+            async function loadPageForUser(){
+                let baseUrl="http://localhost:8080";
+                let res = await fetch(`${baseUrl}/coverages`);
+                if (res.status === 200) {
+                    let resJson = await res.json();
+                    console.log(resJson);
+                    for (var i=0; i < resJson.length;++i){
+                    addoption(dropdown, resJson[i].coveragename, resJson[i].coverageid);
+                    }
+                } else {
+                    console.log("Something went wrong.");
+                }
+                let id = sessionStorage.getItem("reimbursementid");
+                let res1 = await fetch(`${baseUrl}/viewreimbursement/${id}`);
+                if (res1.status === 200) {
+                    let resJson = await res1.json();
+                    document.getElementById('date').value=resJson.date;
+                    document.getElementById('time').value=resJson.time;
+                    document.getElementById('location').value=resJson.location;
+                    document.getElementById('description').value=resJson.description;
+                    document.getElementById('cost').value=resJson.cost;
+                    document.getElementById('gradingformat').value=resJson.gradingformat;
+                    document.getElementById('event').value=resJson.coverage.coverageid;
+                    document.getElementById('justification').value=resJson.anyjustification;
+                } else {
+                    console.log("Something went wrong.");
+                }
+                
+            } 
+            
+            async function UpdateReimbursement(){
+            let baseUrl="http://localhost:8080";
+            dateinput = document.getElementById('date').value;
+            timeinput = document.getElementById('time').value;
+            locationinput = document.getElementById('location').value;
+            descriptioninput = document.getElementById('description').value;
+            costinput = document.getElementById('cost').value;
+            gradingformatinput = document.getElementById('gradingformat').value;
+            coverageidinput = document.getElementById('event').value;
+            anyjustificationinput = document.getElementById('justification').value;
+            optionalfilesinput = document.getElementById('optionalfiles').value;
+            today = new Date();
+            afterdate=new Date();
+            afterdate.setDate(today.getDate()+7);
+            dateafter = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+afterdate.getDate();
+            if(dateinput>dateafter){
+            date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+            dateTime = date+' '+time;
+            if(dateinput && timeinput && locationinput && descriptioninput && costinput && gradingformatinput && coverageidinput!='Select Here' && anyjustificationinput){
+            let values = {
+                date :dateinput,
+                time:timeinput,
+                location:locationinput,
+                description:descriptioninput,
+                cost:costinput,
+                gradingformat:gradingformatinput,
+                coverageid:coverageidinput,
+                anyjustification:anyjustificationinput,
+                optionalfiles:optionalfilesinput,
+                currentstatus:"submitted",
+                createdon:dateTime,
+                updatedon:"null",
+                userid: sessionStorage.getItem("userId"),
+                reimbursementid:sessionStorage.getItem("reimbursementid")
+            }
+            valuesJSON = JSON.stringify(values);
+            let res = await fetch(
+                            `${baseUrl}/updatereimbursementemployee`, // url
+                            {
+                                method: 'PUT',
+                                header: {'Content-Type': 'application/json'},
+                                body: valuesJSON
+                            }
+                        ); 
+            if (res.status === 200) {
+                alert("Submitted");
+                document.location.assign("./EmpoyeeReimbursement.html");
+            } else {
+                console.log("Something went wrong.");
+            }
+        }else{
+            alert("Required Values are missing");
+        }
+        }else{
+            alert("One Week Review Time Required. Select another date");
+        }     
+        } 
+            function logout(){
+            sessionStorage.clear();
+            window.location.assign('./index.html');
+        }
+    </script>
+    </body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Employee Reimbursement</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body class="employee-homepage-body" onload="loadPageForUser()">
+        <nav class="Employee-Navbar" id="EmployeeNavbar">
+            <ul>               
+                <li>               
+                    <a class="navbar-a-element" href="./EmployeeHomepage.html">
+                    Home 
+                    </a>
+                </li>            
+                <li>
+                    <a class="navbar-a-element" href="./EmpoyeeReimbursement.html">
+                    Reimbursement
+                    </a>
+                </li>
+                <li>
+                    <a class="navbar-a-element" href='./index.html' onclick='return logout()'> 
+                    Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <nav class="Employee-Navbar" id="ManagerNavbar">
+            <ul>               
+                <li>               
+                    <a class="navbar-a-element" href="./EmployeeHomepage.html">
+                    Home 
+                    </a>
+                </li>            
+                <li>
+                    <a class="navbar-a-element" href="./EmpoyeeReimbursement.html">
+                    Reimbursement
+                    </a>
+                </li>
+                <li>
+                    <a class="navbar-a-element" href='./index.html' onclick='return logout()'> 
+                    Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div id="EmployeeTable" class="container">
+            <div class="float-child-left">     
+                <h3>All Records</h3>
+                <h3 id="reimbursementamount">Available Reimbursement: </h3>
+                <button id="addreimbursement" onclick="submitrequest()">Submit Request</button>
+            <table id="reimbursementdataemployee" class="reimbursement-table-data float-child">
+                
+                <tr>
+                    <thead>
+                        <th>Reimbursement ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>View</th>
+                        <th>Update</th>
+                    </thead>
+                    
+                </tr>
+                <tr>
+                    <tbody>
+                        
+                    </tbody>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="ManagerTable" class="container">
+        <div class="float-child-left">
+            <h3>All Records</h3>
+        <table id="reimbursementdata" class="reimbursement-table-data float-child">
+            
+            <tr>
+                <thead>
+                    <th>Reimbursement ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>View</th>
+                </thead>
+                
+            </tr>
+            <tr>
+                <tbody>
+                    
+                </tbody>
+            </tr>
+        </table>
+    </div>
+    <div class="float-child-right">
+        <h3>Pending Records</h3>
+        <table id="reimbursementdatapending" class="reimbursement-table-data float-child">
+            
+            <tr>
+                <thead>
+                    <th>Reimbursement ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>View</th>
+                </thead>
+                
+            </tr>
+            <tr>
+                <tbody>
+                    
+                </tbody>
+            </tr>
+        </table>
+    </div>
+    </div>
+        <script>
+
+
+            async function submitrequest(){
+                let baseUrl="https://localhost:8080";
+                document.location.assign("./SubmitReimbursement.html");
+            }
+            async function addRowUser(name,id,date,time,description,status) {
+                var btn = document.createElement('BUTTON');
+                var text = document.createTextNode("View");
+                btn.type = "button";
+                btn.appendChild(text);
+                btn.setAttribute("onclick","ViewReimbursement("+id+");");
+                btn.value = id;
+                var btn1 = document.createElement('BUTTON');
+                var text1 = document.createTextNode("Update");
+                btn1.type = "button";
+                btn1.appendChild(text1);
+                btn1.setAttribute("onclick","UpdateReimbursement("+id+");");
+                btn1.value = id;
+                
+            let table = document.getElementById(name);
+
+            let row = document.createElement("tr")
+
+            let c1 = document.createElement("td")
+            let c2 = document.createElement("td")
+            let c3 = document.createElement("td")
+            let c4 = document.createElement("td")
+            let c5 = document.createElement("td")
+            let c6 = document.createElement("td")
+            let c7 = document.createElement("td")
+
+            c1.innerText = id
+            c2.innerText = date
+            c3.innerText = time
+            c4.innerText = description
+            c5.innerText = status
+            c6.appendChild(btn);
+            if(status=="submitted"){
+            c7.appendChild(btn1);
+            }
+            row.appendChild(c1);
+            row.appendChild(c2);
+            row.appendChild(c3);
+            row.appendChild(c4);
+            row.appendChild(c5);
+            row.appendChild(c6);
+            row.appendChild(c7);
+
+            table.appendChild(row)
+        }
+            
+            async function addRow(name,id,date,time,description,status) {
+                var btn = document.createElement('BUTTON');
+                var text = document.createTextNode("View");
+                btn.type = "button";
+                btn.appendChild(text);
+                btn.setAttribute("onclick","ViewReimbursement("+id+");");
+                btn.value = id;
+                
+            let table = document.getElementById(name);
+
+            let row = document.createElement("tr")
+
+            let c1 = document.createElement("td")
+            let c2 = document.createElement("td")
+            let c3 = document.createElement("td")
+            let c4 = document.createElement("td")
+            let c5 = document.createElement("td")
+            let c6 = document.createElement("td")
+
+            c1.innerText = id
+            c2.innerText = date
+            c3.innerText = time
+            c4.innerText = description
+            c5.innerText = status
+            c6.appendChild(btn);
+
+            row.appendChild(c1);
+            row.appendChild(c2);
+            row.appendChild(c3);
+            row.appendChild(c4);
+            row.appendChild(c5);
+            row.appendChild(c6);
+
+            table.appendChild(row)
+        }
+            async function loadPageForUser(){
+                let userRole=sessionStorage.getItem("userRole");
+                if(userRole=='Employee')
+            {
+                document.title = "Employee Reimbursement";
+                document.getElementById("ManagerNavbar").style.display="none";
+
+                document.getElementById("ManagerTable").style.display="none";
+                document.getElementById("reimbursementamount").innerText="Available Amount: "+sessionStorage.getItem("availablereimbursement");
+                let baseUrl="http://localhost:8080";
+                let id = sessionStorage.getItem("userId");
+                let res = await fetch(`${baseUrl}/viewreimbursements/${id}`);
+                if (res.status === 200) {
+                    let resJson = await res.json();
+                    console.log(resJson);
+                    for (var i=0; i < resJson.length;++i){
+                    addRowUser("reimbursementdataemployee",resJson[i].reimbursementid,resJson[i].date,resJson[i].time,resJson[i].description,
+                    resJson[i].currentstatus);
+                    }
+                } else {
+                    console.log("Something went wrong.");
+                }
+
+            }else if(userRole=='FinancialManager'){
+                document.title = "Manager Reimbursement";
+                document.getElementById("EmployeeNavbar").style.display="none";
+                document.getElementById("addreimbursement").style.display="none";
+                document.getElementById("EmployeeTable").style.display="none";
+                let baseUrl="http://localhost:8080";
+                let res = await fetch(`${baseUrl}/viewallreimbursements`);
+                let res1 = await fetch(`${baseUrl}/viewpendingreimbursements`);
+                if (res.status === 200) {
+                    resJson = await res.json();
+                    console.log(resJson);
+                    for (var i=0; i < resJson.length;++i){
+                    addRow("reimbursementdata",resJson[i].reimbursementid,resJson[i].date,resJson[i].time,resJson[i].description,
+                    resJson[i].currentstatus);
+                    }
+                } else {
+                    console.log("Something went wrong.");
+                }
+                if (res1.status === 200) {
+                    resJson1 = await res1.json();
+                    console.log(resJson1);
+                    for (var i=0; i < resJson1.length;++i){
+                    addRow("reimbursementdatapending",resJson1[i].reimbursementid,resJson1[i].date,resJson1[i].time,resJson1[i].description,
+                    resJson1[i].currentstatus);
+                    }
+                } else {
+                    console.log("Something went wrong.");
+                }
+                
+            }
+             
+
+            } 
+            async function ViewReimbursement(i){
+                let baseUrl = "http://localhost:8080";
+                sessionStorage.setItem('reimbursementid', i);
+                document.location.assign("./ViewReimbursement.html");
+            }
+            async function UpdateReimbursement(i){
+                let baseUrl = "http://localhost:8080";
+                sessionStorage.setItem('reimbursementid', i);
+                document.location.assign("./UpdateReimbursement.html");
+            }
+            function logout(){
+            sessionStorage.clear();
+            window.location.assign('./index.html');
+        }
+        </script>
+    </body>
+</html>

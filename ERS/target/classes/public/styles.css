@@ -1,0 +1,164 @@
+.body{
+    background-image: url("img/background.png");
+    background-position: top;
+}
+.login-window{
+    height: 260px;
+    width: 400px;
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #6b9efbcc;
+    border-radius: 20px;
+    text-align: center;
+}
+.headinglogin{
+    color: #353535;
+    font-family: cursive;
+    border-bottom: 3px solid;
+    padding: 2%;
+}
+.input-login{
+    background-color: transparent;
+    color: black;
+    height: 25px;
+    border-radius: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    margin-bottom: 20px;
+    width: 60%;
+    
+
+}::placeholder {
+    color: rgb(19, 18, 18);
+    opacity: 1; /* Firefox */
+  }
+  .input-login-button{
+    background-color: #0b6bf196;
+    color: black;
+    border-radius: 6px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: large;
+  }
+
+/* Employee styling */
+
+.employee-homepage-body{
+    background-color: beige;
+}
+.employee-heading{
+    padding-top: 20px;
+    text-align: center;
+}
+.Employee-Navbar{
+    height: 35px;
+    top: 0;
+    left: 0;
+    margin: 0px;
+    width: 100%;
+    background-color: #ceb1b1;
+    position:fixed;
+
+}
+.Employee-Navbar ul li{
+    color: black;
+    list-style: none;
+    font-size: 30px;
+    top: 0;
+    display: inline;    
+    
+}
+.Employee-Navbar ul{
+    position: fixed;    
+    margin:auto;
+    width: 100%;
+    text-align: center;
+}
+.reimbursement-table-data{
+    border-collapse: collapse;
+    width: auto;
+    max-width: fit-content;
+    overflow-x:auto;
+    margin: 0 auto;
+}
+.reimbursement-table-data th {
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }.reimbursement-table-data td {
+    height: 30px;
+    vertical-align: bottom;
+    border: 1px solid;
+    padding: 10px;
+  }
+
+  tr:hover {background-color: rgb(248, 173, 146);}
+  /* tr:nth-child(even) {background-color: #f2f2f2;} */
+
+  .submit-request{
+    background-color: rgb(143, 198, 246);
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+  }
+  .form{
+
+    margin-top:10%;
+    border:2px solid grey;
+    border-radius: 20px;
+    width: fit-content;
+    padding: 15px;
+    display: block;
+    
+  }
+  .form-display{
+    display: block;
+  }
+  /*Navbar a element style*/
+  .navbar-a-element{
+    text-decoration: none;
+    color: black;
+  }
+
+  /*View reimbursement styling*/
+
+  .details{
+    height: 700px;
+    width: 600px;
+    border: 2px solid ;
+    border-color: brown;
+    border-radius: 20px;
+    margin: auto;
+    margin-top: 5%;
+  
+  }
+  .form-heading{
+    border-bottom: 2px solid#353535;
+    padding: 10px;
+    margin: auto;
+    text-align: center;
+    font-style: italic;
+    font-family: initial;
+  }
+  .valuesform{
+    padding: 10px;
+  }
+
+  .container{
+    margin-top: 10%;
+    padding: 20px;
+  }
+  .float-child-left {
+    float: left;
+    width: 50%;
+    text-align: center;
+}  .float-child-right{
+  float:right;
+  width: 50%;
+  text-align: center;
+}
+  /*Scroll bar effects*/

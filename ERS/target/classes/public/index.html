@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ERS System</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body class="body">        
+        <div class="login-window">
+            <h1 class="headinglogin">Welcome Log In Here</h1>
+            <input  id="email" class="input-login" type="text" placeholder=" Enter Email Id Here"/>
+            <input  id="password" class="input-login" type="password" placeholder=" Enter Password Here"/>
+            <button id="login" class="input-login-button" type="button" onclick="login()">Login</button>
+        </div>
+        <script>
+            async function login() {
+            let baseUrl = "http://localhost:8080";
+            // get input 
+            uname = document.getElementById('email').value;
+            pass = document.getElementById('password').value;
+            if(uname && pass){
+            let credentials = {
+                emailId: uname, 
+                password: pass
+            }
+            credentialsJSON = JSON.stringify(credentials);
+            let res = await fetch(
+                            `${baseUrl}/authenticate`, // url
+                            {
+                                method: 'POST',
+                                header: {'Content-Type': 'application/json'},
+                                body: credentialsJSON
+                            }
+                        ); 
+            if (res.status === 200) {
+                let resJson = await res.json();
+                    console.log(resJson);
+                    sessionStorage.setItem('userId', resJson.userId);
+                    sessionStorage.setItem('userName',resJson.firstName);
+                    sessionStorage.setItem('userRole',resJson.role);
+                    sessionStorage.setItem('availablereimbursement',resJson.availableReimbursement);
+                    document.location.assign("./EmployeeHomepage.html");   
+                
+            } else if(res.status === 201) {
+                alert("password dont match");
+            } else{
+                alert("User not found");
+            }
+        }else{
+            alert('Emailid or Password Invalid Contact Admin');
+        }
+        }
+        </script>
+    </body>
+</html>

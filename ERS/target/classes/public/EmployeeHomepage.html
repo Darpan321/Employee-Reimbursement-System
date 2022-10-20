@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Employee Homepage</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body class="employee-homepage-body" onload="loadPageForUser()">
+    <nav class="Employee-Navbar" id="EmployeeNavbar">
+        <ul>
+           
+            <li>               
+                <a class="navbar-a-element" href="./EmployeeHomepage.html">
+                Home 
+                </a>
+            </li>
+        
+            <li>
+                <a class="navbar-a-element" href="./EmpoyeeReimbursement.html">
+                Reimbursement
+                </a>
+            </li>
+            <li>
+                <a class="navbar-a-element" href='./index.html' onclick='return logout()'> 
+                Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <nav class="Employee-Navbar" id="ManagerNavbar">
+        <ul>               
+            <li>               
+                <a class="navbar-a-element" href="./EmployeeHomepage.html">
+                Home 
+                </a>
+            </li>            
+            <li>
+                <a class="navbar-a-element" href="./EmpoyeeReimbursement.html">
+                Reimbursement
+                </a>
+            </li>
+            <li>
+                <a class="navbar-a-element" href='./index.html' onclick='return logout()'> 
+                Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <h1 class="employee-heading" id="Message">Welcome </h1>
+
+    <script>
+        let baseUrl="https://localhost:8080";
+        document.getElementById("Message").innerHTML="Welcome "+sessionStorage.getItem("userName");
+
+        async function loadPageForUser(){
+                let userRole=sessionStorage.getItem("userRole");
+                if(userRole=='Employee')
+            {
+                document.title = "Employee Homepage";
+                document.getElementById("ManagerNavbar").style.display="none";
+            }else if(userRole=='FinancialManager'){
+                document.title = "Manager Homepage";
+                document.getElementById("EmployeeNavbar").style.display="none";
+            }
+        }
+
+        function logout(){
+            sessionStorage.clear();
+            window.location.assign('./index.html');
+        }
+    </script>
+    </body>
+</html>

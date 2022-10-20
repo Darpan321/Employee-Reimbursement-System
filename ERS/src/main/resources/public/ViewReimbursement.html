@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>View Reimbursement</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body class="employee-homepage-body" onload="loadPageForUser()">
+        <nav class="Employee-Navbar" id="EmployeeNavbar">
+            <ul>               
+                <li>               
+                    <a class="navbar-a-element" href="./EmployeeHomepage.html">
+                    Home 
+                    </a>
+                </li>            
+                <li>
+                    <a class="navbar-a-element" href="./EmpoyeeReimbursement.html">
+                    Reimbursement
+                    </a>
+                </li>
+                <li>
+                    <a class="navbar-a-element" href='./index.html' onclick='return logout()'> 
+                    Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <nav class="Employee-Navbar" id="ManagerNavbar">
+            <ul>               
+                <li>               
+                    <a class="navbar-a-element" href="./EmployeeHomepage.html">
+                    Home 
+                    </a>
+                </li>            
+                <li>
+                    <a class="navbar-a-element" href="./EmpoyeeReimbursement.html">
+                    Reimbursement
+                    </a>
+                </li>
+                <li>
+                    <a class="navbar-a-element" href='./index.html' onclick='return logout()'> 
+                    Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="details">
+            <h3 class="form-heading">Reimbursement Form</h3>
+            <label class="valuesform">Reimbursement Id:</label>
+            <label id="reimbursementidvalue">0</label>
+            <br>
+            <label id="employeeid" hidden>0</label>
+            <label class="valuesform">Employee Name:</label>
+            <label id="employeeidvalue">0</label>
+            <br>
+            <label class="valuesform">Start Date:</label>
+            <label id="startdatevalue">0</label>
+            <br>
+            <label class="valuesform">Duration:</label>
+            <label id="durationvalue">0</label>
+            <br>
+            <label class="valuesform">Location:</label>
+            <label id="locationvalue">0</label>
+            <br>
+            <label class="valuesform">Description:</label>
+            <label id="descriptionvalue">0</label>
+            <br>
+            <label class="valuesform">Cost:</label>
+            <label id="costvalue">0</label>
+            <br>
+            <label class="valuesform">Available Amount:</label>
+            <label id="availableamount">0</label>
+            <br>
+            <label class="valuesform">Grading Format:</label>
+            <label id="gradingformatvalue">0</label>
+            <br>
+            <label class="valuesform">Event:</label>
+            <label id="eventnamevalue">0</label>
+            <br>
+            <label class="valuesform">Event Percent:</label>
+            <label id="eventpercentage">0</label>
+            <br>
+            <label class="valuesform">Justification:</label>
+            <label id="justificationvalue">0</label>
+            <br>
+            <label class="valuesform">Optional Files:</label>
+            <label id="optionalfiles">0</label>
+            <br>
+            <label class="valuesform">Current Status:</label>
+            <label id="currentstatusvalue">0</label>
+            <br>
+            <div id="EmployeeView">
+            <label class="valuesform">Reason:</label>
+            <label id="reasonvalue">0</label>
+            </div>
+            <br>
+            <div id="ManagerUpdates">
+            <input type="radio" id="approve" name="status" value="approved">
+            <label for="approve">Approve</label>
+            <input type="radio" id="reject" name="status" value="rejected">
+            <label for="reject">Reject</label>
+            <br>
+            <br>
+            <label for="reason"> Reason : </label>
+            <textarea id="reason" cols="15" rows="3">Enter Reason</textarea>
+            <br>
+            <br>
+            <button id="submit" type="button" onclick="UpdateStatus()">Update</button>
+            </div>
+        </div>
+        <script>
+             async function loadPageForUser(){ 
+                let userRole=sessionStorage.getItem("userRole");
+                //document.getElementById("reimbursementidvalue").innerText='1';
+                if(userRole=='Employee')
+            {
+                document.title = "Employee View Reimbursement";
+                document.getElementById("ManagerNavbar").style.display="none";
+                document.getElementById("ManagerUpdates").style.display="none";
+                let baseUrl="http://localhost:8080";
+                let id = sessionStorage.getItem("reimbursementid");
+                let res = await fetch(`${baseUrl}/viewreimbursement/${id}`);
+                if (res.status === 200) {
+                    let resJson = await res.json();
+                    document.getElementById("reimbursementidvalue").innerText=resJson.reimbursementid;
+                    document.getElementById("employeeidvalue").innerText=resJson.user.firstName;
+                    document.getElementById("startdatevalue").innerText=resJson.date;
+                    document.getElementById("durationvalue").innerText=resJson.time;
+                    document.getElementById("locationvalue").innerText=resJson.location;
+                    document.getElementById("descriptionvalue").innerText=resJson.description;
+                    document.getElementById("costvalue").innerText=resJson.cost;
+                    document.getElementById("availableamount").innerText=resJson.user.availableReimbursement;
+                    document.getElementById("gradingformatvalue").innerText=resJson.gradingformat;
+                    document.getElementById("eventnamevalue").innerText=resJson.coverage.coveragename;
+                    document.getElementById("eventpercentage").innerText=resJson.coverage.coveragepercentage;
+                    document.getElementById("justificationvalue").innerText=resJson.anyjustification;
+                    document.getElementById("optionalfiles").innerText=resJson.optionalfiles;
+                    document.getElementById("currentstatusvalue").innerText=resJson.currentstatus;
+                    document.getElementById("reasonvalue").innerText=resJson.reason;
+                } else {
+                    console.log("Something went wrong.");
+                }
+
+            }else if(userRole=='FinancialManager'){
+                document.title = "Manager View Reimbursement";
+                document.getElementById("EmployeeNavbar").style.display="none";
+                document.getElementById("EmployeeView").style.display="none";
+                let baseUrl="http://localhost:8080";
+                let id = sessionStorage.getItem("reimbursementid");
+                let res = await fetch(`${baseUrl}/viewreimbursement/${id}`);
+                if (res.status === 200) {
+                    let resJson = await res.json();
+                    document.getElementById("reimbursementidvalue").innerText=resJson.reimbursementid;
+                    document.getElementById("employeeidvalue").innerText=resJson.user.firstName;
+                    document.getElementById("startdatevalue").innerText=resJson.date;
+                    document.getElementById("durationvalue").innerText=resJson.time;
+                    document.getElementById("locationvalue").innerText=resJson.location;
+                    document.getElementById("descriptionvalue").innerText=resJson.description;
+                    document.getElementById("costvalue").innerText=resJson.cost;
+                    document.getElementById("availableamount").innerText=resJson.user.availableReimbursement;
+                    document.getElementById("gradingformatvalue").innerText=resJson.gradingformat;
+                    document.getElementById("eventnamevalue").innerText=resJson.coverage.coveragename;
+                    document.getElementById("eventpercentage").innerText=resJson.coverage.coveragepercentage;
+                    document.getElementById("justificationvalue").innerText=resJson.anyjustification;
+                    document.getElementById("optionalfiles").innerText=resJson.optionalfiles;
+                    document.getElementById("currentstatusvalue").innerText=resJson.currentstatus;
+                    document.getElementById("reasonvalue").innerText=resJson.reason;
+                    document.getElementById("employeeid").innerText=resJson.user.userId;
+                    if(resJson.currentstatus!="submitted"){
+                        document.getElementById("ManagerUpdates").style.display="none";
+                        document.getElementById("EmployeeView").style.display="block";
+
+                    }
+                } else {
+                    console.log("Something went wrong.");
+                }
+            }
+        }
+            async function UpdateStatus(){
+                let baseUrl="http://localhost:8080";
+                let id=parseInt(document.getElementById("reimbursementidvalue").innerText);
+                let status=document.querySelector('input[name="status"]:checked').value;
+                let reason=document.getElementById("reason").value;
+                let employeeid=parseInt(document.getElementById("employeeid").innerText);
+                let amount=parseInt(document.getElementById("availableamount").innerText);
+                let cost=parseInt(document.getElementById("costvalue").innerText);
+                let percent=parseInt(document.getElementById("eventpercentage").innerText);
+                if(status=="approved"){
+                    if(amount>0){
+                    remainingamount=cost*(percent/100);
+                    if(amount>=remainingamount){
+                        totalremainingamount=amount-remainingamount;
+                    }else{
+                        totalremainingamount=0;
+                    }
+                    }
+                }else{
+                    totalremainingamount=amount;
+                }
+                
+                var today = new Date();
+                var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var dateTime = date+' '+time;
+                let values = {
+                currentstatus: status, 
+                reason: reason,
+                updatedon:dateTime,
+                reimbursementid:id,
+                availableReimbursement:totalremainingamount,
+                userid:employeeid
+                }
+            valuesJSON = JSON.stringify(values);
+            let res = await fetch(
+                            `${baseUrl}/updatereimbursement`, // url
+                            {
+                                method: 'PUT',
+                                header: {'Content-Type': 'application/json'},
+                                body: valuesJSON
+                            }
+                        ); 
+            if (res.status === 200) {
+                alert("Updated");
+                document.location.assign("./EmpoyeeReimbursement.html");
+                
+            } else {
+                console.log("Something went wrong.");
+            }
+            }
+
+            function logout(){
+            sessionStorage.clear();
+            window.location.assign('./index.html');
+        }
+        </script>
+    </body>
+</html>
